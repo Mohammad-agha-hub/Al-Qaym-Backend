@@ -8,7 +8,7 @@ const { requireAuth, COOKIE_NAME } = require("../middleware/auth");
 const TOKEN_TTL = "7d";
 const COOKIE_OPTS = {
   httpOnly: true,
-  sameSite: "lax",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   secure: process.env.NODE_ENV === "production",
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days, matches TOKEN_TTL
 };
@@ -63,7 +63,9 @@ async function createAdmin(req, res) {
     res.status(201).json({ admin, token });
   } catch (err) {
     if (err.code === "23505") {
-      return res.status(409).json({ error: "An account with that email already exists" });
+      return res
+        .status(409)
+        .json({ error: "An account with that email already exists" });
     }
     console.error(err);
     res.status(500).json({ error: "Failed to create account" });

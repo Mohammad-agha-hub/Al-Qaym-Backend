@@ -14,12 +14,20 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 // ─── Middleware ──────────────────────────────────────────────────────────────
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:3000")
+  .split(",")
+  .map((o) => o.trim());
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: (origin, cb) => {
+      // Allow requests with no origin (curl, Postman, server-to-server)
+      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+      cb(new Error(`CORS: origin ${origin} not allowed`));
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true, // required so the browser sends/receives the admin_token cookie
+    credentials: true,
   }),
 );
 app.use(express.json());
