@@ -19,7 +19,7 @@ function signToken(admin) {
     process.env.JWT_SECRET,
     { expiresIn: TOKEN_TTL },
   );
-}
+}//
 
 // ─── POST /api/auth/register ─────────────────────────────────────────────────
 // Open ONLY when there are zero admins yet (first-run bootstrap).
