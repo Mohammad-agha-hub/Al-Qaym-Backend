@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require("../config/db");
 const { requireAuth } = require("../middleware/auth");
 
-const VALID_SECTIONS = ["hero", "about", "approach", "cta", "footer"];
+const VALID_SECTIONS = ["hero", "about", "approach", "cta", "footer", "contact"];
 const VALID_LANGS = ["en", "ur", "fa"];
 
 // ─── GET /api/content/:section ────────────────────────────────────────────────

@@ -9,6 +9,7 @@ const donorsRouter = require("./routes/donors");
 const authRouter = require("./routes/auth");
 const blogRouter = require("./routes/blog");
 const contentRouter = require("./routes/content");
+const contactRouter = require("./routes/contact");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -38,6 +39,7 @@ app.use("/api/donors", donorsRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/content", contentRouter);
+app.use("/api/contact", contactRouter);
 
 app.get("/health", (_req, res) =>
   res.json({ status: "ok", timestamp: new Date().toISOString() }),

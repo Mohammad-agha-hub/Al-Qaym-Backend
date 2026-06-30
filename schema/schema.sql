@@ -124,5 +124,30 @@ INSERT INTO page_content (section, content_en) VALUES
   ],
   "social": ["Facebook", "Instagram"],
   "credit": "Site by Mohammad Agha"
+}'::jsonb),
+('contact', '{
+  "phone": "+92 300 0000000",
+  "whatsapp": "+923000000000",
+  "email": "hello@alqayimaid.org",
+  "address": "Brewery Town, Quetta, Pakistan",
+  "responseTime": "Within 24 hours, daily"
 }'::jsonb)
 ON CONFLICT (section) DO NOTHING;
+
+-- ─── Contact / donation enquiry submissions ─────────────────────────────────
+-- Public visitors submit these via the /contact page (general questions,
+-- donation offers, blood requests, partnership/volunteer enquiries).
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id            SERIAL PRIMARY KEY,
+  name          VARCHAR(255)  NOT NULL,
+  email         VARCHAR(255)  NOT NULL,
+  phone         VARCHAR(30)   NULL,
+  reason        VARCHAR(30)   NOT NULL DEFAULT 'general'
+                  CHECK (reason IN ('general','donate','request-blood','partnership','volunteer')),
+  blood_group   VARCHAR(5)    NULL
+                  CHECK (blood_group IS NULL OR blood_group IN ('A+','A-','B+','B-','AB+','AB-','O+','O-')),
+  message       TEXT          NOT NULL,
+  status        VARCHAR(20)   NOT NULL DEFAULT 'new'
+                  CHECK (status IN ('new','read','resolved')),
+  created_at    TIMESTAMPTZ   NOT NULL DEFAULT NOW()
+);
